@@ -1,0 +1,21 @@
+[project]
+name = "retry-scheduler"
+version = "0.1.0"
+description = "Internal retry scheduler service"
+requires-python = ">=3.15"
+dependencies = [
+    "fastapi>=0.143.1",
+    "pydantic-settings>=2.16.0",
+    "pymongo>=4.19.0",
+    "redis>=6.4.0",
+    "saq>=0.26.4",
+    "uvicorn>=0.34.0",
+]
+
+[tool.uv]
+package = false
+
+[dependency-groups]
+dev = [
+    "ruff>=0.17.0",
+]
