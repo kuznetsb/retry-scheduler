@@ -21,7 +21,7 @@ async def create_job(
         status=JobStatus.PENDING,
     )
     await insert_job(db, job)
-    await queue.enqueue("process_job", id=job.id, job_id=job.id)
+    await queue.enqueue("process_job", id=job.id)
     return job
 
 

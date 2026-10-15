@@ -5,30 +5,27 @@ from fastapi import FastAPI
 from saq.queue.redis import RedisQueue
 
 from app.repositories.mongo import mongo_manager
+from app.repositories.redis import redis_manager
 from app.routes import router
-from app.settings import RedisSettings
 
 
 @asynccontextmanager
 async def lifespan(app: FastAPI) -> AsyncGenerator[None]:
-    queue: RedisQueue | None = None
-    redis_settings = RedisSettings()
     try:
         await mongo_manager.connect()
-        app.state.db = mongo_manager.db
-        queue = RedisQueue.from_url(
-            redis_settings.url,
-            name=redis_settings.queue_name,
+        await redis_manager.connect()
+        queue = RedisQueue(
+            redis_manager.client,
+            name=redis_manager.settings.queue_name,
         )
         await queue.connect()
-        await queue.redis.ping()
+        app.state.db = mongo_manager.db
         app.state.redis_queue = queue
         yield
     finally:
         app.state.db = None
         app.state.redis_queue = None
-        if queue is not None:
-            await queue.disconnect()
+        await redis_manager.close()
         await mongo_manager.close()
 
 
