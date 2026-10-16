@@ -22,8 +22,12 @@ services:
     environment:
       REDIS_URL: redis://redis:6379/0
       REDIS_QUEUE_NAME: jobs:queue
+      MONGODB_URI: mongodb://mongo:27017
+      MONGODB_DATABASE_NAME: retry_scheduler
     depends_on:
       redis:
+        condition: service_healthy
+      mongo:
         condition: service_healthy
     healthcheck:
       test: ["CMD", "saq", "app.worker.worker_settings", "--check"]

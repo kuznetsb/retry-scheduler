@@ -4,6 +4,7 @@ version = "0.1.0"
 description = "Internal retry scheduler service"
 requires-python = ">=3.15"
 dependencies = [
+    "aiohttp>=3.14.5",
     "fastapi>=0.143.1",
     "pydantic-settings>=2.16.0",
     "pymongo>=4.19.0",

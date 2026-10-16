@@ -23,7 +23,10 @@ class MongoManager:
         if self._client is not None:
             return
 
-        client: AsyncMongoClient[dict[str, Any]] = AsyncMongoClient(self.settings.uri)
+        client: AsyncMongoClient[dict[str, Any]] = AsyncMongoClient(
+            self.settings.uri,
+            tz_aware=True,
+        )
         try:
             await client.admin.command("ping")
         except PyMongoError:
