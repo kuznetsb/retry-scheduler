@@ -7,11 +7,30 @@ services:
       MONGODB_URI: mongodb://mongo:27017
       MONGODB_DATABASE_NAME: retry_scheduler
       REDIS_URL: redis://redis:6379/0
+      REDIS_QUEUE_NAME: jobs:queue
     depends_on:
       mongo:
         condition: service_healthy
       redis:
         condition: service_healthy
+      worker:
+        condition: service_healthy
+
+  worker:
+    build: .
+    command: ["python", "-m", "app.worker"]
+    environment:
+      REDIS_URL: redis://redis:6379/0
+      REDIS_QUEUE_NAME: jobs:queue
+    depends_on:
+      redis:
+        condition: service_healthy
+    healthcheck:
+      test: ["CMD", "saq", "app.worker.worker_settings", "--check"]
+      interval: 10s
+      timeout: 5s
+      retries: 3
+      start_period: 15s
 
   mongo:
     image: mongo:7
