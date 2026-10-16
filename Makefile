@@ -10,10 +10,10 @@ test:
 	uv run --frozen pytest
 
 lint:
-	ruff check .
+	uv run --frozen ruff check .
 
 lint-fix:
-	ruff check . --fix
+	uv run --frozen ruff check . --fix
 
 format:
-	ruff format .
+	uv run --frozen ruff format .

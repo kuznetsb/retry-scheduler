@@ -24,4 +24,4 @@ jobs:
         run: make test
 
       - name: Run lint
-        run: uv run --frozen make lint
+        run: make lint
