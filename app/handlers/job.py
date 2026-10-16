@@ -4,11 +4,11 @@ from uuid import uuid4
 
 from pymongo.asynchronous.database import AsyncDatabase
 from saq.job import Job
+from saq.queue.redis import RedisQueue
 
 from app.repositories.models import JobDocument, JobStatus
 from app.repositories.queries import find_job, insert_job, update_job
 from app.schemas import CreateJobRequest
-from saq.queue.redis import RedisQueue
 
 # Assumption: five total execution attempts is an acceptable hardcoded limit.
 MAX_JOB_ATTEMPTS = 5
@@ -25,7 +25,7 @@ JOB_STATUS_TRANSITIONS = {
         JobStatus.FAILED,
         JobStatus.DEAD,
     },
-    JobStatus.FAILED: {JobStatus.RUNNING, JobStatus.DEAD},
+    JobStatus.FAILED: {JobStatus.RUNNING},
     JobStatus.COMPLETED: set(),
     JobStatus.DEAD: set(),
 }

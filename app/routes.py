@@ -2,11 +2,11 @@ from typing import Annotated
 
 from fastapi import APIRouter, Depends, HTTPException, status
 from pymongo.asynchronous.database import AsyncDatabase
+from saq.queue.redis import RedisQueue
 
 from app.dependencies import get_db, get_redis_queue
 from app.handlers.job import create_job, get_job
 from app.schemas import CreateJobRequest, JobResponse
-from saq.queue.redis import RedisQueue
 
 router = APIRouter()
 

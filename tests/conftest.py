@@ -102,9 +102,7 @@ def fake_queue() -> FakeQueue:
 
 
 @pytest_asyncio.fixture
-async def http_server() -> AsyncIterator[
-    Callable[[web.RequestHandler], Any]
-]:
+async def http_server() -> AsyncIterator[Callable[[web.RequestHandler], Any]]:
     servers: list[TestServer] = []
 
     async def serve(handler: web.RequestHandler) -> str:

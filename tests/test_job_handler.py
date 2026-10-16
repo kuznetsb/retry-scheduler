@@ -85,10 +85,13 @@ async def test_get_job_returns_document(make_fake_db: Any) -> None:
 async def test_get_job_returns_none_for_missing_document(make_fake_db: Any) -> None:
     fake_db = make_fake_db(empty=True)
 
-    assert await get_job(
-        cast(AsyncDatabase[dict[str, Any]], fake_db),
-        "missing",
-    ) is None
+    assert (
+        await get_job(
+            cast(AsyncDatabase[dict[str, Any]], fake_db),
+            "missing",
+        )
+        is None
+    )
 
 
 @pytest.mark.asyncio

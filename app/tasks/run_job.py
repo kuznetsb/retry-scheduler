@@ -12,8 +12,8 @@ from aiohttp import (
 from saq.types import Context
 
 from app.handlers.job import claim_job, fail_job, transition_job
-from app.repositories.mongo import mongo_manager
 from app.repositories.models import JobStatus
+from app.repositories.mongo import mongo_manager
 
 logger = logging.getLogger(__name__)
 RETRYABLE_CLIENT_ERROR_STATUSES = {408, 425, 429}
@@ -80,9 +80,11 @@ async def run_job(
 
     timeout = ClientTimeout(total=REQUEST_TIMEOUT_SECONDS)
     try:
-        async with ClientSession(timeout=timeout) as session:
-            async with session.request(JOB_HTTP_METHOD, url, json=payload) as response:
-                response.raise_for_status()
+        async with (
+            ClientSession(timeout=timeout) as session,
+            session.request(JOB_HTTP_METHOD, url, json=payload) as response,
+        ):
+            response.raise_for_status()
     except Exception as error:
         await fail_job(
             db,
